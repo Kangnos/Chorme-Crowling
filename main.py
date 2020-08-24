@@ -1,61 +1,29 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import time
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+browser = webdriver.Chrome('.\chrome crowling test\chromedriver.exe')
 
-def get_image_title(url):
-    # 웹 드라이버 초기화
-    driver_path = '../driver/chromedriver' 
-    driver = webdriver.Chrome(driver_path)
-    driver.implicitly_wait(5) # or bigger second
-    
-    # 열고자 하는 채널 -> 동영상 목록으로 된 url 페이지를 엶
-    driver.get(url)
-    
-    image_list = list() # 썸네일을 받을 수 있는 주소 저장용 리스트
-    title_list = list() # 썸네일 제목을 저장하는 리스트
+delay=3
+browser.implicitly_wait(delay)
 
-    idx = 1
-    while True:
-        try:
-            img_xpath = '/html/body/ytd-app/div/ytd-page-manager/ytd-browse/ytd-two-column-browse-results-renderer/div[1]/ytd-section-list-renderer/div[2]/ytd-item-section-renderer/div[3]/ytd-grid-renderer/div[1]/ytd-grid-video-renderer['+str(idx)+']/div[1]/ytd-thumbnail/a/yt-img-shadow/img'
-            title_xpath = '/html/body/ytd-app/div/ytd-page-manager/ytd-browse/ytd-two-column-browse-results-renderer/div[1]/ytd-section-list-renderer/div[2]/ytd-item-section-renderer/div[3]/ytd-grid-renderer/div[1]/ytd-grid-video-renderer['+str(idx)+']/div[1]/div[1]/div[1]/h3/a'
-            
-            # 이미지가 곧바로 로드 되지 않을 때, 20초간 강제로 기다림
-            img = WebDriverWait(driver, 20).until(EC.presence_of_all_elements_located((By.XPATH, img_xpath)))
-            if img is None:
-                print(idx, 'img is not loaded.')
-            
-            # 한 페이지에 약 8개 불러오는 데, 동영상 목록을 추가 불러오기 위해 스크롤 내림
-            if idx % 8 == 0 :
-                driver.execute_script('window.scrollBy(0, 1080);')
-                time.sleep(2)
-                driver.execute_script('window.scrollBy(0, 1080);')
-                time.sleep(2)
-                driver.execute_script('window.scrollBy(0, 1080);')
-                time.sleep(2)
-            
-            # 썸네일 주소를 리스트에 저장
-            image = driver.find_element_by_xpath(img_xpath)
-            img_url = image.get_attribute('src')
-            image_list.append(img_url)
+start_url  = 'https://www.youtube.com'
+browser.get(start_url)  
+browser.maximize_window()
 
-            # 타이틀을 리스트에 저장
-            title = driver.find_element_by_xpath(title_xpath)
-            print(idx,title.text,img_url)
-            title_list.append(title.text)
+browser.find_elements_by_xpath('//*[@id="search-input"]')[0].click()
+browser.find_elements_by_xpath('//*[@id="search-form"]/div/div/div/div[2]/input')[0].send_keys('강노스')#검색창 영역에 원하는 youtuber입력
+browser.find_elements_by_xpath('//*[@id="search-form"]/div/div/div/div[2]/input')[0].send_keys(Keys.RETURN)#엔터
 
-            idx += 1
-        except Exception as e:
-            print()
-            print(e)
-            break
-    assert len(image_list) == len(title_list)
-    driver.close()
-    return image_list, title_list
+browser.find_elements_by_xpath('//*[@class="style-scope ytd-channel-renderer"]').click()
 
-# 자이언트 펭TV
-url1 = 'https://m.youtube.com/channel/UCtckgmUcpzqGnzcs7xEqMzQ/videos'
-image1, title1 = get_image_title(url1)
+browser.find_element_by_xpath('//*[@class="scrollable style-scope paper-tabs"]/paper-tab[2]').click()
+
+body = browser.find_element_by_tag_name('body')#스크롤하기 위해 소스 추출
+
+num_of_pagedowns = 20
+#10번 밑으로 내리는 것
+while num_of_pagedowns:
+    body.send_keys(Keys.PAGE_DOWN)
+    time.sleep(2)
+    num_of_pagedowns -= 1
