@@ -1,0 +1,6 @@
+text = open('txt open and write\example', 'a', encoding="UTF-8")
+readtext = open('txt open and write\example', 'r')
+lines = readtext.readlines()
+print(lines)
+print(len(lines))
+text.write('hello')
