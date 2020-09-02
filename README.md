@@ -11,4 +11,4 @@
 
 ### This way takes too many times.
 #### So I am going to make a video id searcher.
-##### Just search music and computer made array like "a:b:c" 
+##### Just search music and computer made array like "a::b::c" 
