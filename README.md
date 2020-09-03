@@ -13,3 +13,5 @@
 ## OTHER WAY
 #### So I am going to make a video id searcher.
 ##### Just search music and computer made array like "a::b::c" 
+## I am facing to new obstacle.
+#### YT music is not free now.
