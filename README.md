@@ -15,3 +15,9 @@
 ##### Just search music and computer made array like "a::b::c" 
 ## I am facing to new obstacle.
 #### YT music is not free now.
+
+
+### 2020 09 12 WAY to find youtube music video's title and artist
+#### Use the YOUTUBE API. 
+#### 1) Input the link of the music audio
+#### 2) Output the musicflex particular code.
